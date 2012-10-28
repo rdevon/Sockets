@@ -16,31 +16,96 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <pcrecpp.h>
+#include <sstream>
 
+int port_number = 55555;
+std::string my_IP;
+pcrecpp::RE hello("HELLO I'M (.+)\n");
+pcrecpp::RE goodbye("GOODBYE (.+)\n");
+pcrecpp::RE generate_XYZ("GENERATE (\\d+) BYTES CALLED (\\w+)\n");
+pcrecpp::RE get_XYZ_from("GET (\\w+) FROM (.+)\n");
+pcrecpp::RE give_me_XYZ("GIVE ME (\\w+)\n");
+pcrecpp::RE XYZ_is("(\\w) IS (.+)\n");
 
-int client_main(int argc, char *msg) {
+void error(const char *msg)
+{
+   perror(msg);
+   exit(1);
+}
+
+void print_instructs() {
+   std::cout << "Enter: " << std::endl;
+   std::cout << "      1) HELLO" << std::endl;
+   std::cout << "      2) GOODBYE" << std::endl;
+}
+
+void say_hello(int socket_fd, std::string to_IP) {
+   char buffer[256];
+   std::string hello_message = "HELLO " + to_IP + ", I'M " + my_IP + "\n";
+   write(socket_fd,hello_message.c_str(),hello_message.length());
+   
+   bzero(buffer,256);
+   read(socket_fd,buffer,255);
+   
+   if (!hello.FullMatch(buffer)) error("NO HELLO BACK");
+}
+
+void say_goodbye(int socket_fd, std::string to_IP) {
+   char buffer[256];
+   std::string message = "GOODBYE " + to_IP + "\n";
+   write(socket_fd, message.c_str(), message.length());
+   bzero(buffer,256);
+   read(socket_fd, buffer, 255);
+   
+   if (!goodbye.FullMatch(buffer)) error("NO GOODBYE BACK");
+   close(socket_fd);
+}
+
+int main(int argc, const char * argv[]) {
+   
+   std::string host_IP;
+   
    int socket_fd;
-   int port_number = 1000;
    struct sockaddr_in server_address;
    
    char buffer[256];
    
+   if (argc < 2) {
+      fprintf(stderr,"usage %s hostname\n", argv[0]);
+      exit(0);
+   }
+   
    socket_fd = socket(AF_INET, SOCK_STREAM, 0);
+   
+   std::stringstream out;
+   out << INADDR_ANY;
+   my_IP = out.str();
+   
+   out.clear();
+   out << argv[1];
+   host_IP = out.str();
    
    memset(&server_address, 0, sizeof(server_address));
    server_address.sin_family = AF_INET;
    server_address.sin_port = htons(port_number);
-   server_address.sin_addr.s_addr = inet_addr("10.28.3.1");
+   server_address.sin_addr.s_addr = inet_addr(argv[1]);
    
    connect(socket_fd, (struct sockaddr *) &server_address, sizeof(server_address));
    
-   memset(&buffer, 0, sizeof(buffer));
-   std::string hello_message = "HELLO I'M, 10.28.3.2\n";
-   write(socket_fd, &hello_message, sizeof(hello_message));
-   read(socket_fd, &buffer, 255);
+   int input;
+   while (1) {
+      memset(&buffer, 0, sizeof(buffer));
+      std::cin >> input;
+      switch (input) {
+         case 1: say_hello(socket_fd, host_IP); break;
+         case 2: say_goodbye(socket_fd, host_IP); break;
+         default: {
+            close(socket_fd);
+            exit(0);}
+      }
+      std::cout << buffer << std::endl;
    
-   std::cout << buffer << std::endl;
-   
+   }
    return 0;
    
 }
