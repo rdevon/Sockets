@@ -110,12 +110,12 @@ std::string my_IP;
 int port_number = 55555;
 pcrecpp::RE punk("ARE YOU FEELING LUCKY, PUNK\?");
 pcrecpp::RE hello("HELLO I'M (.+)?\n(.*)");
-pcrecpp::RE hello_back("HELLO ([^,]+), I'M (.+)?\n(.*)");
-pcrecpp::RE goodbye("GOODBYE (.+)\n(.*)");
-pcrecpp::RE generate_XYZ("GENERATE (\\d+) BYTES CALLED (\\w+)?\n(.*)");
-pcrecpp::RE get_XYZ_from("GET (\\w+) FROM (.+)?\n(.*)");
-pcrecpp::RE give_me_XYZ("GIVE ME (\\w+)?\n(.*)");
-pcrecpp::RE XYZ_is("(\\w) IS (.+)?\n(.*)");
+pcrecpp::RE hello_back("HELLO ([^,]+), I'M (.+)?(\n)(.*)");
+pcrecpp::RE goodbye("GOODBYE (.+)?(\n)(.*)");
+pcrecpp::RE generate_XYZ("GENERATE (\\d+) BYTES CALLED (\\w+)?(\n)(.*)");
+pcrecpp::RE get_XYZ_from("GET (\\w+) FROM (.+)?(\n)(.*)");
+pcrecpp::RE give_me_XYZ("GIVE ME (\\w+)?(\n)(.*)");
+pcrecpp::RE XYZ_is("(\\w) IS (.+)?(\n)(.*)");
 
 void error(const char *msg)
 {
@@ -263,8 +263,6 @@ void get_and_return(int socket_fd, std::string thing, std::string from_IP) {
 int main(int argc, const char * argv[])
 {
    srand(time(NULL));
-   int n;
-   string thing;
    
    int pid;
    int socket_fd, new_socket_fd;
@@ -295,7 +293,9 @@ int main(int argc, const char * argv[])
    
    while (1)
    {
-      
+      string IP, from_IP;
+      int n;
+      string thing;
       new_socket_fd = accept(socket_fd, (struct sockaddr *) &client_address, &client_length);
       socklen_t server_length = sizeof(our_address);
       getsockname(socket_fd, (struct sockaddr *) &our_address, &server_length);
@@ -311,7 +311,6 @@ int main(int argc, const char * argv[])
          close(socket_fd);
          std::cout << "My IP: "<< my_IP << ", Client connected from " << out.str() << std::endl;
          while (1) {
-            string IP, from_IP;
             bzero(buffer, 256);
             read(new_socket_fd, buffer, 255);
             std::cout << buffer << std::endl;
