@@ -276,8 +276,8 @@ int main(int argc, const char * argv[])
    
    std::cout << "Listening on port " << port_number << std::endl;
    
-   //while (1)
-   //{
+   while (1)
+   {
       int n;
       string IP, from_IP;
       string thing;
@@ -286,17 +286,18 @@ int main(int argc, const char * argv[])
       socklen_t server_length = sizeof(our_address);
       getsockname(socket_fd, (struct sockaddr *) &our_address, &server_length);
    
-   out.str("");
+      out.str("");
       out << inet_ntoa(our_address.sin_addr);
       my_IP = out.str();
       out.str("");
       out << inet_ntoa(client_address.sin_addr);
-      //pid = fork();
+      pid = fork();
       
-      //if (pid == 0) {
-         //close(socket_fd);
+      if (pid == 0) {
+         close(socket_fd);
          std::cout << "My IP: "<< my_IP << ", Client connected from " << out.str() << std::endl;
          while (1) {
+            std::cout << "here" << std::endl;
             bzero(buffer, 256);
             read(new_socket_fd, buffer, 255);
             std::cout << buffer << std::endl;
@@ -311,10 +312,10 @@ int main(int argc, const char * argv[])
             else if (give_me_XYZ.FullMatch(buffer, &thing)) give_XYZ(new_socket_fd, thing);
             else error("DID NOT UNDERSTAND COMMAND");
          }
-         //exit(0);
-      //}
-      //else close(new_socket_fd);
-   //}
+         exit(0);
+      }
+      else close(new_socket_fd);
+   }
    return 0;
 }
 
