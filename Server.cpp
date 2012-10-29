@@ -289,10 +289,11 @@ int main(int argc, const char * argv[])
       my_IP = out.str();
       out.str("");
       out << inet_ntoa(client_address.sin_addr);
-      std::cout << "My IP: "<< my_IP << ", Client connected from " << out.str() << std::endl;
       pid = fork();
       
       if (pid == 0) {
+         
+         std::cout << "My IP: "<< my_IP << ", Client connected from " << out.str() << std::endl;
          while (1) {
             bzero(buffer, 256);
             read(new_socket_fd, buffer, 255);
