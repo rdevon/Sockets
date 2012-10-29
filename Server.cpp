@@ -255,7 +255,7 @@ int main(int argc, const char * argv[])
    int i;
    string s;
    //    pcrecpp::RE re("(\\w+):(\\d+)");
-   re.FullMatch("ruby 1234", &s, &i);
+   std::cout << re.FullMatch("ruby 1234", &s, &i) << std::endl;
    
    std::cout << s << " " << i << std::endl;
    
