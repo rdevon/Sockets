@@ -106,7 +106,7 @@ private:
 
 std::string my_IP;
 int port_number = 55555;
-pcrecpp::RE hello("HELLO I'M (W+)\n");
+pcrecpp::RE hello("HELLO I'M (\\W+)\n");
 pcrecpp::RE goodbye("GOODBYE (.+)\n");
 pcrecpp::RE generate_XYZ("GENERATE (\\d+) BYTES CALLED (\\w+)\n");
 pcrecpp::RE get_XYZ_from("GET (\\w+) FROM (.+)\n");
