@@ -106,7 +106,7 @@ private:
 
 std::string my_IP;
 int port_number = 55555;
-pcrecpp::RE hello("HELLO I'M (.+)\n");
+pcrecpp::RE hello("HELLO I'M (.+)");
 pcrecpp::RE goodbye("GOODBYE (.+)\n");
 pcrecpp::RE generate_XYZ("GENERATE (\\d+) BYTES CALLED (\\w+)\n");
 pcrecpp::RE get_XYZ_from("GET (\\w+) FROM (.+)\n");
@@ -252,7 +252,7 @@ int main(int argc, const char * argv[])
    
    
    string test;
-   if (hello.FullMatch("HELLO I'M 10\n"), &test) std::cout << test << std::endl;
+   if (hello.FullMatch("HELLO I'M 10"), &test) std::cout << test << std::endl;
    
    int pid;
    int socket_fd, new_socket_fd;
