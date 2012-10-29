@@ -285,9 +285,10 @@ int main(int argc, const char * argv[])
       socklen_t server_length = sizeof(our_address);
       getsockname(socket_fd, (struct sockaddr *) &our_address, &server_length);
       std::stringstream out;
-      out << our_address.sin_addr.s_addr;
+      out << inet_ntoa(our_address.sin_addr);
       my_IP = out.str();
-      out << client_address.sin_addr.s_addr;
+      out.clear();
+      out << inet_ntoa(client_address.sin_addr);
       std::cout << "My IP: "<< my_IP << ", Client connected from " << out.str() << std::endl;
       pid = fork();
       
