@@ -262,14 +262,16 @@ int main(int argc, const char * argv[])
    socket_fd = socket(AF_INET, SOCK_STREAM, 0);
    if (socket_fd < 0) error("ERROR opening socket");
    
-   std::stringstream out;
-   out << INADDR_ANY;
-   my_IP = out.str();
+   
    
    bzero((char *) &server_address, sizeof(server_address));
    server_address.sin_family = AF_INET;
-   server_address.sin_addr.s_addr = inet_addr(my_IP.c_str());
+   server_address.sin_addr.s_addr = INADDR_ANY;
    server_address.sin_port = htons(port_number);
+   
+   std::stringstream out;
+   out << server_address.sin_addr.s_addr;
+   my_IP = out.str();
    
    if (bind(socket_fd, (struct sockaddr *) &server_address, sizeof(server_address)) < 0) error("ERROR on binding");
    
