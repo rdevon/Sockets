@@ -145,12 +145,14 @@ void say_goodbye(int socket_fd, std::string to_IP) {
    
    if (!goodbye.FullMatch(buffer)) error("NO GOODBYE BACK");
    close(socket_fd);
+   exit(0);
 }
 
 void say_goodbye_back(int socket_fd, std::string to_IP) {
    std::string message = "GOODBYE " + to_IP + "\n";
    write(socket_fd, message.c_str(), message.length());
    close(socket_fd);
+   exit(0);
 }
 
 void ask_for(int socket_fd, std::string thing, char *buffer) {
@@ -159,7 +161,6 @@ void ask_for(int socket_fd, std::string thing, char *buffer) {
    bzero(buffer, 256);
    read(socket_fd, buffer, 255);
 }
-
 
 void return_checksum(int socket_fd, std::string thing, u_int32_t checksum) {
    
