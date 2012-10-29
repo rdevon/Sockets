@@ -298,7 +298,7 @@ int main(int argc, const char * argv[])
             read(new_socket_fd, buffer, 255);
             std::cout << buffer << std::endl;
             if (hello.FullMatch(buffer), &IP) {
-               std::cout << IP << std::endl;
+               std::cout << "IP: " << IP << std::endl;
                say_hello_back(new_socket_fd, IP);
             }
             else if (goodbye.FullMatch(buffer), &IP) say_goodbye_back(new_socket_fd, IP);
