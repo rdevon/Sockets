@@ -252,7 +252,6 @@ int main(int argc, const char * argv[])
    
    
    int n;
-   string IP, from_IP;
    string thing;
    
    int pid;
@@ -300,7 +299,7 @@ int main(int argc, const char * argv[])
          close(socket_fd);
          std::cout << "My IP: "<< my_IP << ", Client connected from " << out.str() << std::endl;
          while (1) {
-            std::cout << "here" << std::endl;
+            string IP, from_IP;
             bzero(buffer, 256);
             read(new_socket_fd, buffer, 255);
             std::cout << buffer << std::endl;
