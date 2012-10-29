@@ -262,8 +262,6 @@ int main(int argc, const char * argv[])
    socket_fd = socket(AF_INET, SOCK_STREAM, 0);
    if (socket_fd < 0) error("ERROR opening socket");
    
-   
-   
    bzero((char *) &server_address, sizeof(server_address));
    server_address.sin_family = AF_INET;
    server_address.sin_addr.s_addr = INADDR_ANY;
@@ -279,7 +277,7 @@ int main(int argc, const char * argv[])
    
    client_length = sizeof(client_address);
    
-   std::cout << "Server IP " << my_IP << " listening on port " << port_number << std::endl;
+   std::cout << "Listening on port " << port_number << std::endl;
    
    while (1)
    {
@@ -287,8 +285,10 @@ int main(int argc, const char * argv[])
       socklen_t server_length = sizeof(our_address);
       getsockname(socket_fd, (struct sockaddr *) &our_address, &server_length);
       std::stringstream out;
+      out << our_address.sin_addr.s_addr;
+      my_IP = out.str();
       out << client_address.sin_addr.s_addr;
-      std::cout << "Client connected from " << out.str() << std::endl;
+      std::cout << "My IP: "<< my_IP << ", Client connected from " << out.str() << std::endl;
       pid = fork();
       
       if (pid == 0) {
