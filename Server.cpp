@@ -195,7 +195,7 @@ void refuse_XYZ(int socket_fd) {
 void give_XYZ(int socket_fd, std::string thing) {
    
    string test;
-   if (hello.FullMatch("HELLO I'M 10.10.10.10"), &test) std::cout << test << std::endl;
+   if (hello.FullMatch("HELLO I'M 10.10.10.10\n"), &test) std::cout << test << std::endl;
    
    FILE *file_handle;
    file_handle = fopen(thing.c_str(), "r");
