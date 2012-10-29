@@ -249,7 +249,7 @@ void get_and_return(int socket_fd, std::string thing, std::string from_IP) {
 
 int main(int argc, const char * argv[])
 {
-   std::string test;
+   string test;
    hello.FullMatch("HELLO I'M blah", &test);
    std::cout << test << std::endl;
    
