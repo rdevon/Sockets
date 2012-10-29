@@ -106,6 +106,7 @@ private:
 
 std::string my_IP;
 int port_number = 55555;
+pcrecpp::RE re("(\\w+):(\\d+)");
 pcrecpp::RE hello("HELLO I'M (.+)");
 pcrecpp::RE goodbye("GOODBYE (.+)\n");
 pcrecpp::RE generate_XYZ("GENERATE (\\d+) BYTES CALLED (\\w+)\n");
@@ -251,8 +252,12 @@ int main(int argc, const char * argv[])
 {
    
    
-   string test;
-   if (hello.FullMatch("HELLO IM blah"), &test) std::cout << test << std::endl;
+   int i;
+   string s;
+   //    pcrecpp::RE re("(\\w+):(\\d+)");
+   re.FullMatch("ruby:1234", &s, &i);
+   
+   std::cout << s << " " << i << std::endl;
    
    int pid;
    int socket_fd, new_socket_fd;
