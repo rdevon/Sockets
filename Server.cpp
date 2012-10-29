@@ -106,7 +106,7 @@ private:
 
 std::string my_IP;
 int port_number = 55555;
-pcrecpp::RE hello("HELLO I'M (\\d+)\n");
+pcrecpp::RE hello("HELLO I'M (\\d+)");
 pcrecpp::RE goodbye("GOODBYE (.+)\n");
 pcrecpp::RE generate_XYZ("GENERATE (\\d+) BYTES CALLED (\\w+)\n");
 pcrecpp::RE get_XYZ_from("GET (\\w+) FROM (.+)\n");
@@ -195,7 +195,7 @@ void refuse_XYZ(int socket_fd) {
 void give_XYZ(int socket_fd, std::string thing) {
    
    string test;
-   if (hello.FullMatch("HELLO I'M 10\n"), &test) std::cout << test << std::endl;
+   if (hello.FullMatch("HELLO I'M 10"), &test) std::cout << test << std::endl;
    
    FILE *file_handle;
    file_handle = fopen(thing.c_str(), "r");
