@@ -249,10 +249,6 @@ void get_and_return(int socket_fd, std::string thing, std::string from_IP) {
 
 int main(int argc, const char * argv[])
 {
-   std::string test;
-   if (hello.FullMatch("HELLO I'M blah\n", &test)) std::cout << "yes" << std::endl;
-   std::cout << test << std::endl;
-   
    int n;
    std::string IP, from_IP;
    std::string thing;
@@ -301,7 +297,10 @@ int main(int argc, const char * argv[])
             bzero(buffer, 256);
             read(new_socket_fd, buffer, 255);
             std::cout << buffer << std::endl;
-            if (hello.FullMatch(buffer), &IP) say_hello_back(new_socket_fd, IP);
+            if (hello.FullMatch(buffer), &IP) {
+               std::cout << IP << std::endl;
+               say_hello_back(new_socket_fd, IP);
+            }
             else if (goodbye.FullMatch(buffer), &IP) say_goodbye_back(new_socket_fd, IP);
             else if (generate_XYZ.FullMatch(buffer, &n, &thing)) generate(new_socket_fd, thing, n);
             else if (get_XYZ_from.FullMatch(buffer, &thing, &from_IP)) get_and_return(new_socket_fd, thing, from_IP);
