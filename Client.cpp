@@ -20,12 +20,12 @@
 
 int port_number = 55555;
 std::string my_IP;
-pcrecpp::RE hello("HELLO I'M (.+)\n");
-pcrecpp::RE goodbye("GOODBYE (.+)\n");
-pcrecpp::RE generate_XYZ("GENERATE (\\d+) BYTES CALLED (\\w+)\n");
-pcrecpp::RE get_XYZ_from("GET (\\w+) FROM (.+)\n");
-pcrecpp::RE give_me_XYZ("GIVE ME (\\w+)\n");
-pcrecpp::RE XYZ_is("(\\w) IS (.+)\n");
+pcrecpp::RE hello("HELLO I'M (.+)\n(.*)");
+pcrecpp::RE goodbye("GOODBYE (.+)\n(.*)");
+pcrecpp::RE generate_XYZ("GENERATE (\\d+) BYTES CALLED (\\w+)\n(.*)");
+pcrecpp::RE get_XYZ_from("GET (\\w+) FROM (.+)\n(.*)");
+pcrecpp::RE give_me_XYZ("GIVE ME (\\w+)\n(.*)");
+pcrecpp::RE XYZ_is("(\\w) IS (.+)\n(.*)");
 
 void error(const char *msg)
 {
