@@ -112,6 +112,7 @@ int main(int argc, const char * argv[]) {
    
    while (1) {
       memset(&buffer, 0, sizeof(buffer));
+      print_instructs();
       std::cin >> input;
       switch (input) {
          case 1: say_hello(socket_fd, host_IP); break;
