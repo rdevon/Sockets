@@ -107,7 +107,7 @@ private:
 std::string my_IP;
 int port_number = 55555;
 pcrecpp::RE hello("HELLO I'M (.+)\n(.*)");
-pcrecpp::RE hello_back("HELLO (^,+), I'M (.+)\(.+)");
+pcrecpp::RE hello_back("HELLO ([^,\n]+), I'M (.+)\(.+)");
 pcrecpp::RE goodbye("GOODBYE (.+)\n(.*)");
 pcrecpp::RE generate_XYZ("GENERATE (\\d+) BYTES CALLED (\\w+)\n(.*)");
 pcrecpp::RE get_XYZ_from("GET (\\w+) FROM (.+)\n(.*)");
@@ -117,7 +117,7 @@ pcrecpp::RE XYZ_is("(\\w) IS (.+)\n(.*)");
 void error(const char *msg)
 {
    perror(msg);
-   exit(1);
+   exit(0);
 }
 
 void say_hello(int socket_fd, std::string to_IP) {
