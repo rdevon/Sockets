@@ -279,6 +279,9 @@ int main(int argc, const char * argv[])
    while (1)
    {
       new_socket_fd = accept(socket_fd, (struct sockaddr *) &client_address, &client_length);
+      std::stringstream out;
+      out << &client_address;
+      std::cout << "Client connected from " << out.str() << std::endl;
       pid = fork();
       
       if (pid == 0) {

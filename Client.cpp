@@ -104,6 +104,9 @@ int main(int argc, const char * argv[]) {
    connect(socket_fd, (struct sockaddr *) &server_address, sizeof(server_address));
    
    int input;
+   
+   std::cout << "Client at IP " << my_IP << " connecting to " << host_IP << std::endl;
+   
    while (1) {
       memset(&buffer, 0, sizeof(buffer));
       std::cin >> input;
