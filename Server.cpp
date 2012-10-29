@@ -17,6 +17,8 @@
 #include <netinet/in.h>
 #include <pcrecpp.h>
 #include <sstream>
+#include <time.h>
+#include <math.h>
 
 static const uint32_t kCrc32Table[256] = {
    0x00000000, 0x77073096, 0xee0e612c, 0x990951ba,
@@ -106,6 +108,7 @@ private:
 
 std::string my_IP;
 int port_number = 55555;
+pcrecpp::RE punk("ARE YOU FEELING LUCKY, PUNK\?\n(.*)");
 pcrecpp::RE hello("HELLO I'M (.+)\n(.*)");
 pcrecpp::RE hello_back("HELLO ([^,]+), I'M (.+)\n(.*)");
 pcrecpp::RE goodbye("GOODBYE (.+)\n(.*)");
@@ -160,6 +163,10 @@ void ask_for(int socket_fd, std::string thing, char *buffer) {
    write(socket_fd, message.c_str(), message.length());
    bzero(buffer, 256);
    read(socket_fd, buffer, 255);
+   if (punk.FullMatch(buffer)) {
+      bzero(buffer, 256);
+      read(socket_fd, buffer, 255);
+   }
 }
 
 void return_checksum(int socket_fd, std::string thing, u_int32_t checksum) {
@@ -177,6 +184,9 @@ void generate(int socket_fd, std::string thing, int number) {
    
    FILE *file_handle;
    u_int8_t XYZ[number];
+   for (int i = 0; i < number; ++i) {
+      XYZ[i] = rand()%256;
+   }
    
    file_handle = fopen(thing.c_str(), "w");
    
@@ -189,17 +199,18 @@ void generate(int socket_fd, std::string thing, int number) {
    return_checksum(socket_fd, thing, checksum);
 }
 
-void refuse_XYZ(int socket_fd) {
-   std::string message = "NICE TRY\n";
+void refuse_XYZ(int socket_fd, std::string to_IP) {
+   std::string message = "ARE YOU FEELING LUCKY, PUNK?\n";
    write(socket_fd, message.c_str(), message.length());
+   say_goodbye(socket_fd, to_IP);
 }
 
-void give_XYZ(int socket_fd, std::string thing) {
+void give_XYZ(int socket_fd, std::string thing, std::string to_IP) {
    
    FILE *file_handle;
    file_handle = fopen(thing.c_str(), "r");
    if (file_handle == NULL) {
-      refuse_XYZ(socket_fd);
+      refuse_XYZ(socket_fd, to_IP);
       return;
    }
    fseek (file_handle , 0 , SEEK_END);
@@ -251,7 +262,7 @@ void get_and_return(int socket_fd, std::string thing, std::string from_IP) {
 
 int main(int argc, const char * argv[])
 {
-   
+   srand(time(NULL));
    int n;
    string thing;
    
@@ -308,7 +319,7 @@ int main(int argc, const char * argv[])
             else if (goodbye.FullMatch(buffer, &IP)) say_goodbye_back(new_socket_fd, IP);
             else if (generate_XYZ.FullMatch(buffer, &n, &thing)) generate(new_socket_fd, thing, n);
             else if (get_XYZ_from.FullMatch(buffer, &thing, &from_IP)) get_and_return(new_socket_fd, thing, from_IP);
-            else if (give_me_XYZ.FullMatch(buffer, &thing)) give_XYZ(new_socket_fd, thing);
+            else if (give_me_XYZ.FullMatch(buffer, &thing)) give_XYZ(new_socket_fd, thing, IP);
             else error("DID NOT UNDERSTAND COMMAND");
          }
          exit(0);
