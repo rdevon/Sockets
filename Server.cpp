@@ -292,14 +292,13 @@ int main(int argc, const char * argv[])
       pid = fork();
       
       if (pid == 0) {
-         
          std::cout << "My IP: "<< my_IP << ", Client connected from " << out.str() << std::endl;
          while (1) {
             bzero(buffer, 256);
             read(new_socket_fd, buffer, 255);
             std::cout << buffer << std::endl;
             if (hello.FullMatch(buffer), &IP) {
-               std::cout << buffer << std::endl;
+               std::cout << "matched hello: " << buffer << std::endl;
                std::cout << "IP: " << IP << std::endl;
                say_hello_back(new_socket_fd, IP);
             }
