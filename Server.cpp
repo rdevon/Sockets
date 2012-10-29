@@ -252,11 +252,13 @@ int main(int argc, const char * argv[])
 {
    
    
-   string s;
+   int n;
+   string IP, from_IP;
+   string thing;
    //    pcrecpp::RE re("(\\w+):(\\d+)");
-   if(hello.FullMatch("HELLO I'M 10.10", &s)) std::cout << "matched" << std::endl;
+   if(hello.FullMatch("HELLO I'M 10.10.10.10", &IP)) std::cout << "matched" << std::endl;
    
-   std::cout << s << std::endl;
+   std::cout << IP << std::endl;
    
    int pid;
    int socket_fd, new_socket_fd;
@@ -287,9 +289,6 @@ int main(int argc, const char * argv[])
    
    while (1)
    {
-      int n;
-      string IP, from_IP;
-      string thing;
       
       new_socket_fd = accept(socket_fd, (struct sockaddr *) &client_address, &client_length);
       socklen_t server_length = sizeof(our_address);
