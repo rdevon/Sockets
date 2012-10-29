@@ -257,7 +257,7 @@ int main(int argc, const char * argv[])
    socklen_t client_length;
    char buffer[256];
    
-   struct sockaddr_in server_address, client_address;
+   struct sockaddr_in server_address, client_address, our_address;
    
    socket_fd = socket(AF_INET, SOCK_STREAM, 0);
    if (socket_fd < 0) error("ERROR opening socket");
@@ -284,6 +284,8 @@ int main(int argc, const char * argv[])
    while (1)
    {
       new_socket_fd = accept(socket_fd, (struct sockaddr *) &client_address, &client_length);
+      socklen_t server_length = sizeof(our_address);
+      getsockname(socket_fd, (struct sockaddr *) &our_address, &server_length);
       std::stringstream out;
       out << client_address.sin_addr.s_addr;
       std::cout << "Client connected from " << out.str() << std::endl;
