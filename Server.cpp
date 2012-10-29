@@ -277,7 +277,7 @@ int main(int argc, const char * argv[])
    std::cout << "Listening on port " << port_number << std::endl;
    
    //while (1)
-   {
+   //{
       int n;
       string IP, from_IP;
       string thing;
