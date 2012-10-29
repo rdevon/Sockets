@@ -249,9 +249,6 @@ void get_and_return(int socket_fd, std::string thing, std::string from_IP) {
 
 int main(int argc, const char * argv[])
 {
-   int n;
-   std::string IP, from_IP;
-   std::string thing;
    int pid;
    int socket_fd, new_socket_fd;
    socklen_t client_length;
@@ -281,6 +278,9 @@ int main(int argc, const char * argv[])
    
    while (1)
    {
+      int n;
+      std::string IP, from_IP;
+      std::string thing;
       new_socket_fd = accept(socket_fd, (struct sockaddr *) &client_address, &client_length);
       socklen_t server_length = sizeof(our_address);
       getsockname(socket_fd, (struct sockaddr *) &our_address, &server_length);
