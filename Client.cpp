@@ -21,7 +21,7 @@
 int port_number = 55555;
 std::string my_IP;
 pcrecpp::RE hello("HELLO I'M (.+)\n(.*)");
-pcrecpp::RE hello_back("HELLO (^,+), I'M (.+)\(.+)");
+pcrecpp::RE hello_back("HELLO ([^,\n]+), I'M (.+)\(.+)");
 pcrecpp::RE goodbye("GOODBYE (.+)\n(.*)");
 pcrecpp::RE generate_XYZ("GENERATE (\\d+) BYTES CALLED (\\w+)\n(.*)");
 pcrecpp::RE get_XYZ_from("GET (\\w+) FROM (.+)\n(.*)");
