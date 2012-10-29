@@ -77,7 +77,7 @@ int main(int argc, const char * argv[]) {
    std::string host_IP;
    
    int socket_fd;
-   struct sockaddr_in server_address;
+   struct sockaddr_in server_address, our_address;
    
    char buffer[256];
    
@@ -88,13 +88,7 @@ int main(int argc, const char * argv[]) {
    
    socket_fd = socket(AF_INET, SOCK_STREAM, 0);
    
-   std::stringstream out;
-   out << INADDR_ANY;
-   my_IP = out.str();
-   
-   out.clear();
-   out << argv[1];
-   host_IP = out.str();
+   std::stringstream out;   
    
    memset(&server_address, 0, sizeof(server_address));
    server_address.sin_family = AF_INET;
@@ -102,8 +96,17 @@ int main(int argc, const char * argv[]) {
    server_address.sin_addr.s_addr = inet_addr(argv[1]);
    
    connect(socket_fd, (struct sockaddr *) &server_address, sizeof(server_address));
-   
+   memset(&our_address, 0, sizeof(our_address));
+   socklen_t our_length;
+   getsockname(socket_fd, (struct sockaddr *) &our_address, &our_length);
+
    int input;
+   
+   out << inet_ntoa(our_address.sin_addr);
+   my_IP = out.str();
+   out.clear();
+   out << inet_ntoa(server_address.sin_addr);
+   host_IP = out.str();
    
    std::cout << "Client at IP " << my_IP << " connecting to " << host_IP << std::endl;
    
