@@ -21,6 +21,7 @@
 int port_number = 55555;
 std::string my_IP;
 pcrecpp::RE hello("HELLO I'M (.+)\n(.*)");
+pcrecpp::RE hello_back("HELLO (^,+), I'M (.+)\(.+)");
 pcrecpp::RE goodbye("GOODBYE (.+)\n(.*)");
 pcrecpp::RE generate_XYZ("GENERATE (\\d+) BYTES CALLED (\\w+)\n(.*)");
 pcrecpp::RE get_XYZ_from("GET (\\w+) FROM (.+)\n(.*)");
@@ -57,7 +58,7 @@ void say_hello(int socket_fd, std::string to_IP) {
    bzero(buffer,256);
    read(socket_fd,buffer,255);
    std::cout << buffer << std::endl;
-   if (!hello.FullMatch(buffer)) error("NO HELLO BACK");
+   if (!hello_back.FullMatch(buffer)) error("NO HELLO BACK");
 }
 
 void say_goodbye(int socket_fd, std::string to_IP) {
