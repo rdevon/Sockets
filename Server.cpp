@@ -276,11 +276,14 @@ int main(int argc, const char * argv[])
    listen(socket_fd, 5);
    
    client_length = sizeof(client_address);
+   
+   std::cout << "Server IP " << my_IP << " listening on port " << port_number << std::endl;
+   
    while (1)
    {
       new_socket_fd = accept(socket_fd, (struct sockaddr *) &client_address, &client_length);
       std::stringstream out;
-      out << &client_address;
+      out << client_address.sin_addr.s_addr;
       std::cout << "Client connected from " << out.str() << std::endl;
       pid = fork();
       
