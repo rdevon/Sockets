@@ -285,7 +285,8 @@ int main(int argc, const char * argv[])
       new_socket_fd = accept(socket_fd, (struct sockaddr *) &client_address, &client_length);
       socklen_t server_length = sizeof(our_address);
       getsockname(socket_fd, (struct sockaddr *) &our_address, &server_length);
-      std::stringstream out;
+   
+   out.str("");
       out << inet_ntoa(our_address.sin_addr);
       my_IP = out.str();
       out.str("");
