@@ -279,8 +279,8 @@ int main(int argc, const char * argv[])
    while (1)
    {
       int n;
-      std::string IP, from_IP;
-      std::string thing;
+      string IP, from_IP;
+      string thing;
       new_socket_fd = accept(socket_fd, (struct sockaddr *) &client_address, &client_length);
       socklen_t server_length = sizeof(our_address);
       getsockname(socket_fd, (struct sockaddr *) &our_address, &server_length);
@@ -292,6 +292,7 @@ int main(int argc, const char * argv[])
       pid = fork();
       
       if (pid == 0) {
+         close(socket_fd);
          std::cout << "My IP: "<< my_IP << ", Client connected from " << out.str() << std::endl;
          while (1) {
             bzero(buffer, 256);
