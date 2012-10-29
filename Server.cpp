@@ -252,7 +252,7 @@ int main(int argc, const char * argv[])
    
    
    string test;
-   if (hello.FullMatch("HELLO I'M 10.10.10.10\n"), &test) std::cout << test << std::endl;
+   if (hello.FullMatch("HELLO I'M 10\n"), &test) std::cout << test << std::endl;
    
    int pid;
    int socket_fd, new_socket_fd;
