@@ -119,6 +119,7 @@ int main(int argc, const char * argv[]) {
       switch (input) {
          case 1: say_hello(socket_fd, host_IP); break;
          case 2: say_goodbye(socket_fd, host_IP); break;
+         case 3: enter_message(socket_fd); break;
          default: {
             close(socket_fd);
             exit(0);}

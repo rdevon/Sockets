@@ -305,7 +305,6 @@ int main(int argc, const char * argv[])
       my_IP = out.str();
       out.str("");
       out << inet_ntoa(client_address.sin_addr);
-      my_IP = out.str();
       pid = fork();
       
       if (pid == 0) {
