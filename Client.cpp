@@ -37,6 +37,17 @@ void print_instructs() {
    std::cout << "Enter: " << std::endl;
    std::cout << "      1) HELLO" << std::endl;
    std::cout << "      2) GOODBYE" << std::endl;
+   std::cout << "      3) MESSAGE" << std::endl;
+}
+
+void enter_message(int socket_fd) {
+   char buffer[256];
+   bzero(buffer, strlen(buffer));
+   std::cout << "Enter message: " << std::endl;
+   std::cin >> buffer;
+   write(socket_fd, buffer,strlen(buffer));
+   bzero(buffer, strlen(buffer));
+   std::cout << buffer << std::endl;
 }
 
 void say_hello(int socket_fd, std::string to_IP) {

@@ -159,21 +159,32 @@ void ask_for(int socket_fd, std::string thing, char *buffer) {
    read(socket_fd, buffer, 255);
 }
 
-void generate(std::string thing, int number) {
-   FILE *file_handle;
-   char XYZ[number];
-   
-   file_handle = fopen(thing.c_str(), "w");
-   
-   fprintf(file_handle, XYZ);
-   fclose(file_handle);
-}
 
 void return_checksum(int socket_fd, std::string thing, u_int32_t checksum) {
+   
    std::stringstream out;
    out << checksum;
    std::string message = thing + "'s CHECKSUM IS " + out.str() + "\n";
    write(socket_fd, message.c_str(), message.length());
+}
+
+void generate(int socket_fd, std::string thing, int number) {
+   
+   Crc32 crc;
+   u_int32_t checksum;
+   
+   FILE *file_handle;
+   u_int8_t XYZ[number];
+   
+   file_handle = fopen(thing.c_str(), "w");
+   
+   fprintf(file_handle, (char*)XYZ);
+   fclose(file_handle);
+   
+   crc.AddData(XYZ, sizeof(XYZ));
+   checksum = crc.GetCrc32();
+   crc.Reset();
+   return_checksum(socket_fd, thing, checksum);
 }
 
 void refuse_XYZ(int socket_fd) {
@@ -208,7 +219,7 @@ void get_and_return(int socket_fd, std::string thing, std::string from_IP) {
    struct sockaddr_in server_address;
    
    char buffer[256];
-   u_int8_t XYZ[32];
+   char XYZ[32];
    std::string thing_got;
    Crc32 crc;
    u_int32_t checksum;
@@ -226,10 +237,10 @@ void get_and_return(int socket_fd, std::string thing, std::string from_IP) {
    
    ask_for(new_socket_fd, thing, buffer);
    
-   if (XYZ_is.FullMatch(buffer, &thing_got, &XYZ)) error("NOTHING RETURNED");
+   if (XYZ_is.FullMatch(buffer, &thing_got, XYZ)) error("NOTHING RETURNED");
    if (thing != thing_got) error("WRONG XYZ");
    
-   crc.AddData(XYZ, sizeof(XYZ));
+   crc.AddData((u_int8_t*)XYZ, sizeof(XYZ));
    checksum = crc.GetCrc32();
    crc.Reset();
    
@@ -238,7 +249,9 @@ void get_and_return(int socket_fd, std::string thing, std::string from_IP) {
 
 int main(int argc, const char * argv[])
 {
-   std::string IP;
+   int n;
+   std::string IP, from_IP;
+   std::string thing;
    int pid;
    int socket_fd, new_socket_fd;
    socklen_t client_length;
@@ -273,6 +286,12 @@ int main(int argc, const char * argv[])
             bzero(buffer, 256);
             read(new_socket_fd, buffer, 255);
             std::cout << buffer << std::endl;
+            if (hello.FullMatch(buffer), &IP) say_hello_back(new_socket_fd, IP);
+            else if (goodbye.FullMatch(buffer), &IP) say_goodbye_back(new_socket_fd, IP);
+            else if (generate_XYZ.FullMatch(buffer, &n, &thing)) generate(new_socket_fd, thing, n);
+            else if (get_XYZ_from.FullMatch(buffer, &thing, &from_IP)) get_and_return(new_socket_fd, thing, from_IP);
+            else if (give_me_XYZ.FullMatch(buffer, &thing)) give_XYZ(new_socket_fd, thing);
+            else error("DID NOT UNDERSTAND COMMAND");
          }
          exit(0);
       }
