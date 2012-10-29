@@ -298,7 +298,7 @@ int main(int argc, const char * argv[])
       string thing;
       new_socket_fd = accept(socket_fd, (struct sockaddr *) &client_address, &client_length);
       socklen_t server_length = sizeof(our_address);
-      getsockname(socket_fd, (struct sockaddr *) &our_address, &server_length);
+      getsockname(new_socket_fd, (struct sockaddr *) &our_address, &server_length);
    
       out.str("");
       out << inet_ntoa(our_address.sin_addr);
