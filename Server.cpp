@@ -252,12 +252,11 @@ int main(int argc, const char * argv[])
 {
    
    
-   int i;
    string s;
    //    pcrecpp::RE re("(\\w+):(\\d+)");
-   std::cout << re.FullMatch("ruby 1234", &s, &i) << std::endl;
+   std::cout << hello.FullMatch("HELLO I'M blah", &s) << std::endl;
    
-   std::cout << s << " " << i << std::endl;
+   std::cout << s << std::endl;
    
    int pid;
    int socket_fd, new_socket_fd;
