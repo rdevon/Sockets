@@ -106,9 +106,8 @@ private:
 
 std::string my_IP;
 int port_number = 55555;
-pcrecpp::RE test("HELLO ([^,]+), I'M(.*)");
 pcrecpp::RE hello("HELLO I'M (.+)\n(.*)");
-pcrecpp::RE hello_back("HELLO ([^,]+), I'M (.+)\(.+)");
+pcrecpp::RE hello_back("HELLO ([^,]+), I'M (.+)\n(.*)");
 pcrecpp::RE goodbye("GOODBYE (.+)\n(.*)");
 pcrecpp::RE generate_XYZ("GENERATE (\\d+) BYTES CALLED (\\w+)\n(.*)");
 pcrecpp::RE get_XYZ_from("GET (\\w+) FROM (.+)\n(.*)");
@@ -251,9 +250,6 @@ void get_and_return(int socket_fd, std::string thing, std::string from_IP) {
 
 int main(int argc, const char * argv[])
 {
-   string a,b;
-   test.FullMatch("HELLO fdsfds, I'Mfds",&a, &b);
-   std::cout << a << " " << b << std::endl;
    
    int n;
    string thing;
