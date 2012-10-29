@@ -67,7 +67,7 @@ void say_goodbye(int socket_fd, std::string to_IP) {
    write(socket_fd, message.c_str(), message.length());
    bzero(buffer,256);
    read(socket_fd, buffer, 255);
-   
+   std::cout << buffer << std::endl;
    if (!goodbye.FullMatch(buffer)) error("NO GOODBYE BACK");
    close(socket_fd);
 }
