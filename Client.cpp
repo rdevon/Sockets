@@ -46,7 +46,7 @@ void enter_message(int socket_fd) {
    char buffer[256];
    bzero(buffer, strlen(buffer));
    std::cout << "Enter message: " << std::endl;
-   std::cin.getline(buffer, 255);
+   std::cin.getline(buffer, 256);
    write(socket_fd, buffer,strlen(buffer));
    bzero(buffer, strlen(buffer));
    std::cout << buffer << std::endl;
