@@ -287,7 +287,7 @@ int main(int argc, const char * argv[])
       std::stringstream out;
       out << inet_ntoa(our_address.sin_addr);
       my_IP = out.str();
-      out.clear();
+      out.str("");
       out << inet_ntoa(client_address.sin_addr);
       std::cout << "My IP: "<< my_IP << ", Client connected from " << out.str() << std::endl;
       pid = fork();

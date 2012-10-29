@@ -104,7 +104,7 @@ int main(int argc, const char * argv[]) {
    
    out << inet_ntoa(our_address.sin_addr);
    my_IP = out.str();
-   out.clear();
+   out.str("");
    out << inet_ntoa(server_address.sin_addr);
    host_IP = out.str();
    
