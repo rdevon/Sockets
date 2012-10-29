@@ -53,6 +53,7 @@ void enter_message(int socket_fd) {
    std::string message = out.str() + "\n";
    write(socket_fd, message.c_str(),message.length());
    bzero(buffer, strlen(buffer));
+   read(socket_fd, buffer, 255);
    std::cout << buffer << std::endl;
 }
 
