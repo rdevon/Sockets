@@ -254,7 +254,7 @@ int main(int argc, const char * argv[])
    
    string s;
    //    pcrecpp::RE re("(\\w+):(\\d+)");
-   if(hello.FullMatch("HELLO I'M 10", &s)) std::cout << "matched" << std::endl;
+   if(hello.FullMatch("HELLO I'M 10.10", &s)) std::cout << "matched" << std::endl;
    
    std::cout << s << std::endl;
    
