@@ -254,10 +254,6 @@ int main(int argc, const char * argv[])
    int n;
    string IP, from_IP;
    string thing;
-   //    pcrecpp::RE re("(\\w+):(\\d+)");
-   if(hello.FullMatch("HELLO I'M 10.10.10.10", &IP)) std::cout << "matched" << std::endl;
-   
-   std::cout << IP << std::endl;
    
    int pid;
    int socket_fd, new_socket_fd;
