@@ -202,7 +202,7 @@ void generate(int socket_fd, unsigned thing, int number) {
       int r = rand()%(strlen(alphanum));
       XYZ[i] = alphanum[r];
    }
-   
+   XYZ[number] = 0;
    std::stringstream out;
    char str[4];
    std::cout << XYZ << std::endl;
