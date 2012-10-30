@@ -245,7 +245,7 @@ void give_XYZ(int socket_fd, unsigned thing, std::string to_IP) {
    std::stringstream thingout;
    thingout << thing;
    
-   std::string message = thingout.str() + " IS " + XYZ + "\n";
+   std::string message = thingout.str() + " IS " + XYZ + "test\n";
    write(socket_fd, message.c_str(), message.length());
 }
 
@@ -302,8 +302,7 @@ void get_and_return(int socket_fd, unsigned thing, std::string from_IP) {
       read(read_fd, buffer, sizeof(buffer));
       close(read_fd);
    }
-   
-   std::cout << "buff: " << buffer << std::endl;
+   bzero(XYZ, 31);
    if (!XYZ_is.FullMatch(buffer, &thing, XYZ)) error("NOTHING RETURNED");
    
    crc.AddData((u_int8_t*)XYZ, sizeof(XYZ));
