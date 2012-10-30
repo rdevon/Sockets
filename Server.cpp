@@ -187,9 +187,7 @@ void return_checksum(int socket_fd, std::string thing, u_int32_t checksum) {
 void generate(int socket_fd, std::string thing, int number) {
    
    static const char alphanum[] =
-   "0123456789"
-   "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-   "abcdefghijklmnopqrstuvwxyz";
+   "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
    
    Crc32 crc;
    u_int32_t checksum;
@@ -198,7 +196,7 @@ void generate(int socket_fd, std::string thing, int number) {
    char XYZ[number];
    bzero(XYZ, number);
    for (int i = 0; i < number; ++i) {
-      XYZ[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
+      XYZ[i] = alphanum[rand() % (strlen(alphanum))];
    }
    
    file_handle = fopen(thing.c_str(), "w");
