@@ -301,9 +301,9 @@ void get_and_return(int socket_fd, unsigned thing, std::string from_IP) {
       bzero(buffer, 255);
       read(read_fd, buffer, sizeof(buffer));
       close(read_fd);
-      std::cout << buffer << std::endl;
    }
    
+   std::cout << "buff: " << buffer << std::endl;
    if (!XYZ_is.FullMatch(buffer, &thing, XYZ)) error("NOTHING RETURNED");
    
    crc.AddData((u_int8_t*)XYZ, sizeof(XYZ));
