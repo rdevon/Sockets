@@ -205,8 +205,7 @@ void generate(int socket_fd, std::string thing, int number) {
    std::cout << "Generated " << out.str() << std::endl;
    
    file_handle = fopen(thing.c_str(), "w");
-   
-   fprintf(file_handle, "%s", XYZ);
+   fwrite(XYZ, 1, sizeof(XYZ), file_handle);
    fclose(file_handle);
    
    crc.AddData((u_int8_t*)XYZ, sizeof(XYZ));
