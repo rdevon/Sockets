@@ -205,12 +205,13 @@ void generate(int socket_fd, unsigned thing, int number) {
    out.str("");
    out << XYZ;
    std::cout << "Generated " << out.str() << std::endl;
-   char str[];
-   file_handle = fopen(itoa(thing, str, 10), "w");
+   char str[4];
+   sprintf(str, "%d", thing);
+   file_handle = fopen(str, "w");
    fwrite(XYZ, 1, sizeof(XYZ), file_handle);
    fclose(file_handle);
    
-   crc.AddData((u_int8_t*)XYZ, sizeof(XYZ));
+   crc.AddData((u_int8_t*)XYZ, (u_int32_t)sizeof(XYZ));
    checksum = crc.GetCrc32();
    crc.Reset();
    return_checksum(socket_fd, thing, checksum);
@@ -225,7 +226,8 @@ void refuse_XYZ(int socket_fd, std::string to_IP) {
 void give_XYZ(int socket_fd, unsigned thing, std::string to_IP) {
    char str[4];
    FILE *file_handle;
-   file_handle = fopen(itoa(thing, str, 10), "r");
+   sprintf(str, "%d", thing);
+   file_handle = fopen(str, "r");
    if (file_handle == NULL) {
       refuse_XYZ(socket_fd, to_IP);
       return;
@@ -240,7 +242,10 @@ void give_XYZ(int socket_fd, unsigned thing, std::string to_IP) {
    std::stringstream out;
    out << XYZ;
 
-   std::string message = thing + " IS " + XYZ + "\n";
+   std::stringstream thingout;
+   thingout << thing;
+   
+   std::string message = thingout.str() + " IS " + XYZ + "\n";
    write(socket_fd, message.c_str(), message.length());
 }
 
@@ -272,20 +277,25 @@ void get_and_return(int socket_fd, unsigned thing, std::string from_IP) {
    int new_socket_fd;
    
    char buffer[256];
+   char child_buffer[256];
+   int child_pipe[1];
    char XYZ[32];
-   unsigned thing_got;
    Crc32 crc;
    u_int32_t checksum;
    
    int pid = fork();
+   pipe(child_pipe);
    if (pid == 0) {
       new_socket_fd = connect_to(from_IP);
-      ask_for(new_socket_fd, thing, buffer, from_IP);
+      ask_for(new_socket_fd, thing, child_buffer, from_IP);
+      write(child_pipe[0], child_buffer, strlen(child_buffer));
       exit(0);
    }
+   else {
+      while (read(child_pipe[0], buffer, sizeof(buffer)) < 0) {}
+   }
    
-   if (XYZ_is.FullMatch(buffer, &thing_got, XYZ)) error("NOTHING RETURNED");
-   if (thing != thing_got) error("WRONG XYZ");
+   if (!XYZ_is.FullMatch(buffer, &thing, XYZ)) error("NOTHING RETURNED");
    
    crc.AddData((u_int8_t*)XYZ, sizeof(XYZ));
    checksum = crc.GetCrc32();
