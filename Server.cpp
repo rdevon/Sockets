@@ -347,7 +347,7 @@ int main(int argc, const char * argv[])
    {
       int i;
       char str[10];
-      XYZ_is.FullMatch("6789 IS I4BPGJ5b0e", &i, str);
+      XYZ_is.FullMatch("6789 IS I4BPGJ5b0e\n", &i, str);
       std::cout << "Match? " << i << " " << str << std::endl;
       
       new_socket_fd = accept(socket_fd, (struct sockaddr *) &client_address, &client_length);
