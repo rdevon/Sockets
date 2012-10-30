@@ -198,9 +198,9 @@ void generate(int socket_fd, std::string thing, int number) {
    for (int i = 0; i < number; ++i) {
       int r = rand()%(strlen(alphanum));
       XYZ[i] = alphanum[r];
-      std::cout << i << " " << r << " " << XYZ[i] << std::endl;
    }
    std::stringstream out;
+   out.str("");
    out << XYZ;
    std::cout << "Generated " << out.str() << std::endl;
    
@@ -341,6 +341,14 @@ int main(int argc, const char * argv[])
          string thing;
          close(socket_fd);
          std::cout << "My IP: "<< my_IP << ", Client connected from " << out.str() << std::endl;
+         bzero(buffer, 256);
+         read(new_socket_fd, buffer, 255);
+         if (hello.FullMatch(buffer, &IP)) say_hello_back(new_socket_fd, IP);
+         else {
+            error("NO HELLO");
+            close(new_socket_fd);
+            exit(0);
+         }
          while (1) {
             bzero(buffer, 256);
             read(new_socket_fd, buffer, 255);
