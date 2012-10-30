@@ -198,6 +198,9 @@ void generate(int socket_fd, std::string thing, int number) {
    for (int i = 0; i < number; ++i) {
       XYZ[i] = alphanum[rand() % (strlen(alphanum))];
    }
+   std::stringstream out;
+   out << XYZ;
+   std::cout << "Generated " << out.str() << std::endl;
    
    file_handle = fopen(thing.c_str(), "w");
    
