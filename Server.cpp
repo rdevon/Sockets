@@ -345,6 +345,11 @@ int main(int argc, const char * argv[])
    
    while (1)
    {
+      int i;
+      char str[10];
+      XYZ_is.FullMatch("6789 IS I4BPGJ5b0e", &i, str);
+      std::cout << i << " " << str << std::endl;
+      
       new_socket_fd = accept(socket_fd, (struct sockaddr *) &client_address, &client_length);
       socklen_t server_length = sizeof(our_address);
       getsockname(new_socket_fd, (struct sockaddr *) &our_address, &server_length);
