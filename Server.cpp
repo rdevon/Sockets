@@ -113,9 +113,9 @@ pcrecpp::RE hello("HELLO I'M (.+)\n");
 pcrecpp::RE hello_back("HELLO ([^,]+), I'M (.+)\n");
 pcrecpp::RE goodbye("GOODBYE (.+)\n");
 pcrecpp::RE generate_XYZ("GENERATE (\\d+) BYTES CALLED (\\d+)\n");
-pcrecpp::RE get_XYZ_from("GET (\\w+) FROM (.+)\n");
+pcrecpp::RE get_XYZ_from("GET (\\d+) FROM (.+)\n");
 pcrecpp::RE give_me_XYZ("GIVE ME (\\w+)\n");
-pcrecpp::RE XYZ_is("(\\w) IS (.+)\n");
+pcrecpp::RE XYZ_is("(\\d+) IS (.+)\n");
 
 void error(const char *msg)
 {
@@ -380,11 +380,18 @@ int main(int argc, const char * argv[])
             read(new_socket_fd, buffer, 255);
             std::cout << buffer << std::endl;
             if (hello.FullMatch(buffer, &IP)) say_hello_back(new_socket_fd, IP);
-            else if (goodbye.FullMatch(buffer)) say_goodbye_back(new_socket_fd, IP);
+            else if (goodbye.FullMatch(buffer)) {
+               say_goodbye_back(new_socket_fd, IP);
+               close(new_socket_fd);
+               exit(0);
+            }
             else if (generate_XYZ.FullMatch(buffer, &n, &thing)) generate(new_socket_fd, thing, n);
             else if (get_XYZ_from.FullMatch(buffer, &thing, &from_IP)) get_and_return(new_socket_fd, thing, from_IP);
             else if (give_me_XYZ.FullMatch(buffer, &thing)) give_XYZ(new_socket_fd, thing, IP);
-            else error("DID NOT UNDERSTAND COMMAND");
+            else {
+               close(new_socket_fd);
+               error("DID NOT UNDERSTAND COMMAND");
+            }
          }
          exit(0);
       }
