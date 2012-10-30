@@ -335,10 +335,7 @@ int main(int argc, const char * argv[])
    out << server_address.sin_addr.s_addr;
    my_IP = out.str();
    
-   if (bind(socket_fd, (struct sockaddr *) &server_address, sizeof(server_address)) < 0) {
-      close(socket_fd);
-      bind(socket_fd, (struct sockaddr *) &server_address, sizeof(server_address));
-   };
+   if (bind(socket_fd, (struct sockaddr *) &server_address, sizeof(server_address)) < 0) error("BIND FAILED");
    
    listen(socket_fd, 5);
    
