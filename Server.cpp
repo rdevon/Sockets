@@ -241,7 +241,7 @@ void give_XYZ(int socket_fd, std::string thing, std::string to_IP) {
 
 int connect_to(std::string IP) {
    int socket_fd;
-   struct sockaddr_in server_address;
+   struct sockaddr_in server_address, my_address;
    socket_fd = socket(AF_INET, SOCK_STREAM, 0);
    
    memset(&server_address, 0, sizeof(server_address));
@@ -250,6 +250,13 @@ int connect_to(std::string IP) {
    server_address.sin_addr.s_addr = inet_addr(IP.c_str());
    
    if (connect(socket_fd, (struct sockaddr *) &server_address, sizeof(server_address)) < 0) error("ERROR ON CONNECTION");
+   
+   socklen_t len = sizeof(my_address);
+   getsockname(socket_fd, (struct sockaddr *)&my_address, &len);
+   
+   std::stringstream out;
+   out << inet_ntoa(my_address.sin_addr);
+   my_IP = out.str();
    
    say_hello(socket_fd, IP);
    
