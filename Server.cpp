@@ -125,7 +125,7 @@ void error(const char *msg)
 
 void say_hello(int socket_fd, std::string to_IP) {
    char buffer[256];
-   std::string hello_message = "HELLO IM " + my_IP + "\n";
+   std::string hello_message = "HELLO I'M " + my_IP + "\n";
    write(socket_fd,hello_message.c_str(),hello_message.length());
    
    bzero(buffer,256);
