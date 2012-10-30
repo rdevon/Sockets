@@ -204,9 +204,8 @@ void generate(int socket_fd, unsigned thing, int number) {
    }
    
    std::stringstream out;
-   out.str("");
-   out << XYZ;
    char str[4];
+   std::cout << XYZ << std::endl;
    sprintf(str, "%d", thing);
    file_handle = fopen(str, "w");
    fwrite(XYZ, 1, sizeof(XYZ), file_handle);
