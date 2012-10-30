@@ -104,7 +104,7 @@ int main(int argc, const char * argv[]) {
    
    if (connect(socket_fd, (struct sockaddr *) &server_address, sizeof(server_address)) < 0) error("ERROR CONNECTING");
    memset(&my_address, 0, sizeof(my_address));
-   socklen_t my_length;
+   socklen_t my_length = sizeof(my_address);
    if (getsockname(socket_fd, (struct sockaddr *) &my_address, &my_length) <0) error("CANT GET NAME");
    
    std::cout << "Connecting on port " << ntohs(my_address.sin_port) << std::endl;
