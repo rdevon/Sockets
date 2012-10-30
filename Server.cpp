@@ -179,10 +179,10 @@ void ask_for(int socket_fd, unsigned thing, char *buffer, std::string from_IP) {
 }
 
 void return_checksum(int socket_fd, unsigned thing, u_int32_t checksum) {
-   
    std::stringstream out;
    out << checksum;
    std::string message = thing + "'s CHECKSUM IS " + out.str() + "\n";
+   std::cout << message << std::endl;
    write(socket_fd, message.c_str(), message.length());
 }
 
@@ -215,7 +215,6 @@ void generate(int socket_fd, unsigned thing, int number) {
    crc.AddData((u_int8_t*)XYZ, (u_int32_t)sizeof(XYZ));
    checksum = crc.GetCrc32();
    crc.Reset();
-   std::cout << checksum << std::endl;
    return_checksum(socket_fd, thing, checksum);
 }
 
