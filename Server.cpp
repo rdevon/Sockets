@@ -300,6 +300,7 @@ void get_and_return(int socket_fd, unsigned thing, std::string from_IP) {
    }
    else {
       close (write_fd);
+      bzero(buffer, 255);
       read(read_fd, buffer, sizeof(buffer));
       close(read_fd);
       std::cout << buffer << std::endl;
