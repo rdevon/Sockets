@@ -196,6 +196,7 @@ void generate(int socket_fd, std::string thing, int number) {
    
    FILE *file_handle;
    char XYZ[number];
+   bzero(XYZ, number);
    for (int i = 0; i < number; ++i) {
       XYZ[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
    }
