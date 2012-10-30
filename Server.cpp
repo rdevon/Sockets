@@ -154,7 +154,6 @@ void say_goodbye(int socket_fd, std::string to_IP) {
       error("NO GOODBYE BACK");
    }
    close(socket_fd);
-   exit(0);
 }
 
 void say_goodbye_back(int socket_fd, std::string to_IP) {
