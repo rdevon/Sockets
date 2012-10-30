@@ -180,6 +180,7 @@ void ask_for(int socket_fd, unsigned thing, char *buffer, std::string from_IP) {
 
 void return_checksum(int socket_fd, unsigned thing, u_int32_t checksum) {
    std::stringstream out;
+   out.str("");
    out << checksum;
    std::string message = thing + "'s CHECKSUM IS " + out.str() + "\n";
    std::cout << message << std::endl;
