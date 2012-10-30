@@ -161,7 +161,6 @@ void say_goodbye_back(int socket_fd, std::string to_IP) {
    std::string message = "GOODBYE " + to_IP + "\n";
    write(socket_fd, message.c_str(), message.length());
    close(socket_fd);
-   exit(0);
 }
 
 void ask_for(int socket_fd, unsigned thing, char *buffer, std::string from_IP) {
