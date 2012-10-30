@@ -131,7 +131,10 @@ void say_hello(int socket_fd, std::string to_IP) {
    bzero(buffer,256);
    read(socket_fd,buffer,255);
    
-   if (!hello_back.FullMatch(buffer)) error("NO HELLO BACK");
+   if (!hello_back.FullMatch(buffer)) {
+      close(socket_fd);
+      error("NO HELLO BACK");
+   }
 }
 
 void say_hello_back(int socket_fd, std::string to_IP) {
@@ -146,7 +149,10 @@ void say_goodbye(int socket_fd, std::string to_IP) {
    bzero(buffer,256);
    read(socket_fd, buffer, 255);
    
-   if (!goodbye.FullMatch(buffer)) error("NO GOODBYE BACK");
+   if (!goodbye.FullMatch(buffer)) {
+      close(socket_fd);
+      error("NO GOODBYE BACK");
+   }
    close(socket_fd);
    exit(0);
 }
@@ -158,7 +164,7 @@ void say_goodbye_back(int socket_fd, std::string to_IP) {
    exit(0);
 }
 
-void ask_for(int socket_fd, std::string thing, char *buffer) {
+void ask_for(int socket_fd, std::string thing, char *buffer, std::string from_IP) {
    std::string message = "GIVE ME " + thing + "\n";
    write(socket_fd, message.c_str(), message.length());
    bzero(buffer, 256);
@@ -167,6 +173,7 @@ void ask_for(int socket_fd, std::string thing, char *buffer) {
       bzero(buffer, 256);
       read(socket_fd, buffer, 255);
    }
+   say_goodbye(socket_fd, from_IP);
 }
 
 void return_checksum(int socket_fd, std::string thing, u_int32_t checksum) {
@@ -179,13 +186,18 @@ void return_checksum(int socket_fd, std::string thing, u_int32_t checksum) {
 
 void generate(int socket_fd, std::string thing, int number) {
    
+   static const char alphanum[] =
+   "0123456789"
+   "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+   "abcdefghijklmnopqrstuvwxyz";
+   
    Crc32 crc;
    u_int32_t checksum;
    
    FILE *file_handle;
-   u_int8_t XYZ[number];
+   char XYZ[number];
    for (int i = 0; i < number; ++i) {
-      XYZ[i] = rand()%256;
+      XYZ[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
    }
    
    file_handle = fopen(thing.c_str(), "w");
@@ -193,7 +205,7 @@ void generate(int socket_fd, std::string thing, int number) {
    fprintf(file_handle, (char*)XYZ);
    fclose(file_handle);
    
-   crc.AddData(XYZ, sizeof(XYZ));
+   crc.AddData((u_int8_t*)XYZ, sizeof(XYZ));
    checksum = crc.GetCrc32();
    crc.Reset();
    return_checksum(socket_fd, thing, checksum);
@@ -227,9 +239,25 @@ void give_XYZ(int socket_fd, std::string thing, std::string to_IP) {
    write(socket_fd, message.c_str(), message.length());
 }
 
+int connect_to(std::string IP) {
+   int socket_fd;
+   struct sockaddr_in server_address;
+   socket_fd = socket(AF_INET, SOCK_STREAM, 0);
+   
+   memset(&server_address, 0, sizeof(server_address));
+   server_address.sin_family = AF_INET;
+   server_address.sin_port = htons(port_number);
+   server_address.sin_addr.s_addr = inet_addr(IP.c_str());
+   
+   if (connect(socket_fd, (struct sockaddr *) &server_address, sizeof(server_address)) < 0) error("ERROR ON CONNECTION");
+   
+   say_hello(socket_fd, IP);
+   
+   return socket_fd;
+}
+
 void get_and_return(int socket_fd, std::string thing, std::string from_IP) {
    int new_socket_fd;
-   struct sockaddr_in server_address;
    
    char buffer[256];
    char XYZ[32];
@@ -237,18 +265,11 @@ void get_and_return(int socket_fd, std::string thing, std::string from_IP) {
    Crc32 crc;
    u_int32_t checksum;
    
-   new_socket_fd = socket(AF_INET, SOCK_STREAM, 0);
+   fork();
+   new_socket_fd = connect_to(from_IP);
    
-   memset(&server_address, 0, sizeof(server_address));
-   server_address.sin_family = AF_INET;
-   server_address.sin_port = htons(port_number);
-   server_address.sin_addr.s_addr = inet_addr(from_IP.c_str());
-   
-   connect(new_socket_fd, (struct sockaddr *) &server_address, sizeof(server_address));
-   
-   say_hello(new_socket_fd, from_IP);
-   
-   ask_for(new_socket_fd, thing, buffer);
+   ask_for(new_socket_fd, thing, buffer, from_IP);
+   exit(0);
    
    if (XYZ_is.FullMatch(buffer, &thing_got, XYZ)) error("NOTHING RETURNED");
    if (thing != thing_got) error("WRONG XYZ");
