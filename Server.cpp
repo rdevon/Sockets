@@ -280,7 +280,6 @@ void get_and_return(int socket_fd, unsigned thing, std::string from_IP) {
    char child_buffer[256];
    int pipe_fds[2];
    int read_fd, write_fd;
-   char XYZ[32];
    Crc32 crc;
    u_int32_t checksum;
    pipe(pipe_fds);
@@ -302,14 +301,17 @@ void get_and_return(int socket_fd, unsigned thing, std::string from_IP) {
       read(read_fd, buffer, sizeof(buffer));
       close(read_fd);
    }
-   bzero(XYZ, 31);
    std::string matchstring;
    if (!XYZ_is.FullMatch(buffer, &thing, &matchstring)) error("NOTHING RETURNED");
+   
+   
+   char XYZ[matchstring.length()];
+   bzero(XYZ, strlen(XYZ));
    std::stringstream out;
    out.str("");
    out << matchstring;
    out >> XYZ;
-   crc.AddData((u_int8_t*)XYZ, sizeof(XYZ));
+   crc.AddData((u_int8_t*)XYZ, (u_int32_t)sizeof(XYZ));
    checksum = crc.GetCrc32();
    crc.Reset();
    
