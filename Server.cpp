@@ -201,6 +201,7 @@ void generate(int socket_fd, unsigned thing, int number) {
       int r = rand()%(strlen(alphanum));
       XYZ[i] = alphanum[r];
    }
+   
    std::stringstream out;
    out.str("");
    out << XYZ;
@@ -214,6 +215,7 @@ void generate(int socket_fd, unsigned thing, int number) {
    crc.AddData((u_int8_t*)XYZ, (u_int32_t)sizeof(XYZ));
    checksum = crc.GetCrc32();
    crc.Reset();
+   std::cout << checksum << std::endl;
    return_checksum(socket_fd, thing, checksum);
 }
 
