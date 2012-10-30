@@ -185,7 +185,6 @@ void return_checksum(int socket_fd, unsigned thing, u_int32_t checksum) {
    std::stringstream thingout;
    thingout << thing;
    std::string message = thingout.str() + "'s CHECKSUM IS " + out.str() + "\n";
-   std::cout << message << std::endl;
    write(socket_fd, message.c_str(), message.length());
 }
 
@@ -208,7 +207,6 @@ void generate(int socket_fd, unsigned thing, int number) {
    std::stringstream out;
    out.str("");
    out << XYZ;
-   std::cout << "Generated " << out.str() << std::endl;
    char str[4];
    sprintf(str, "%d", thing);
    file_handle = fopen(str, "w");
@@ -330,7 +328,10 @@ int main(int argc, const char * argv[])
    out << server_address.sin_addr.s_addr;
    my_IP = out.str();
    
-   if (bind(socket_fd, (struct sockaddr *) &server_address, sizeof(server_address)) < 0) error("ERROR on binding");
+   if (bind(socket_fd, (struct sockaddr *) &server_address, sizeof(server_address)) < 0) {
+      close(socket_fd);
+      bind(socket_fd, (struct sockaddr *) &server_address, sizeof(server_address));
+   };
    
    listen(socket_fd, 5);
    
