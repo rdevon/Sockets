@@ -294,6 +294,9 @@ void get_and_return(int socket_fd, unsigned thing, std::string from_IP) {
       write(child_pipe[0], child_buffer, strlen(child_buffer));
       exit(0);
    }
+   else {
+      read(child_pipe[0], buffer, sizeof(buffer));
+   }
    
    if (!XYZ_is.FullMatch(buffer, &thing, XYZ)) error("NOTHING RETURNED");
    
