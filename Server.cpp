@@ -202,7 +202,7 @@ void generate(int socket_fd, std::string thing, int number) {
    
    file_handle = fopen(thing.c_str(), "w");
    
-   fprintf(file_handle, (char*)XYZ);
+   fprintf(file_handle, "%s", XYZ);
    fclose(file_handle);
    
    crc.AddData((u_int8_t*)XYZ, sizeof(XYZ));
@@ -343,7 +343,7 @@ int main(int argc, const char * argv[])
             read(new_socket_fd, buffer, 255);
             std::cout << buffer << std::endl;
             if (hello.FullMatch(buffer, &IP)) say_hello_back(new_socket_fd, IP);
-            else if (goodbye.FullMatch(buffer, &IP)) say_goodbye_back(new_socket_fd, IP);
+            else if (goodbye.FullMatch(buffer)) say_goodbye_back(new_socket_fd, IP);
             else if (generate_XYZ.FullMatch(buffer, &n, &thing)) generate(new_socket_fd, thing, n);
             else if (get_XYZ_from.FullMatch(buffer, &thing, &from_IP)) get_and_return(new_socket_fd, thing, from_IP);
             else if (give_me_XYZ.FullMatch(buffer, &thing)) give_XYZ(new_socket_fd, thing, IP);
