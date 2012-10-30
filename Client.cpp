@@ -102,10 +102,12 @@ int main(int argc, const char * argv[]) {
    server_address.sin_port = htons(port_number);
    server_address.sin_addr.s_addr = inet_addr(argv[1]);
    
-   if (connect(socket_fd, (struct sockaddr *) &server_address, sizeof(server_address)) < 0) error("ERROR CONNECTING");
+   int new_fd = connect(socket_fd, (struct sockaddr *) &server_address, sizeof(server_address));
+   
+   if (new_fd < 0) error("ERROR CONNECTING");
    memset(&our_address, 0, sizeof(our_address));
    socklen_t our_length;
-   getsockname(socket_fd, (struct sockaddr *) &our_address, &our_length);
+   getsockname(new_fd, (struct sockaddr *) &our_address, &our_length);
 
    int input;
    
