@@ -115,7 +115,7 @@ pcrecpp::RE goodbye("GOODBYE (.+)\n");
 pcrecpp::RE generate_XYZ("GENERATE (\\d+) BYTES CALLED (\\d+)\n");
 pcrecpp::RE get_XYZ_from("GET (\\d+) FROM (.+)\n");
 pcrecpp::RE give_me_XYZ("GIVE ME (\\w+)\n");
-pcrecpp::RE XYZ_is("(\\d+) IS (.+)\n");
+pcrecpp::RE XYZ_is("^(\\d+) IS (.+)\n");
 
 void error(const char *msg)
 {
@@ -245,7 +245,7 @@ void give_XYZ(int socket_fd, unsigned thing, std::string to_IP) {
    std::stringstream thingout;
    thingout << thing;
    
-   std::string message = thingout.str() + " IS " + XYZ + "test\n";
+   std::string message = thingout.str() + " IS " + XYZ + "\n";
    write(socket_fd, message.c_str(), message.length());
 }
 
@@ -303,6 +303,7 @@ void get_and_return(int socket_fd, unsigned thing, std::string from_IP) {
       close(read_fd);
    }
    bzero(XYZ, 31);
+   
    if (!XYZ_is.FullMatch(buffer, &thing, XYZ)) error("NOTHING RETURNED");
    
    crc.AddData((u_int8_t*)XYZ, sizeof(XYZ));
