@@ -18,7 +18,7 @@
 #include <pcrecpp.h>
 #include <sstream>
 
-int port_number = 55555;
+int port_number = 8080;
 std::string my_IP;
 pcrecpp::RE punk("ARE YOU FEELING LUCKY, PUNK\?");
 pcrecpp::RE hello("HELLO I'M (.+)\n");
