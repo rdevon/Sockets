@@ -285,9 +285,8 @@ void get_and_return(int socket_fd, unsigned thing, std::string from_IP) {
    char XYZ[32];
    Crc32 crc;
    u_int32_t checksum;
-   
-   int pid = fork();
    pipe(child_pipe);
+   int pid = fork();
    if (pid == 0) {
       new_socket_fd = connect_to(from_IP);
       ask_for(new_socket_fd, thing, child_buffer, from_IP);
