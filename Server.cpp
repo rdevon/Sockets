@@ -305,8 +305,10 @@ void get_and_return(int socket_fd, unsigned thing, std::string from_IP) {
    bzero(XYZ, 31);
    std::string matchstring;
    if (!XYZ_is.FullMatch(buffer, &thing, &matchstring)) error("NOTHING RETURNED");
-   std::cout << matchstring << std::endl;
-   
+   std::stringstream out;
+   out.str("");
+   out << matchstring;
+   out >> XYZ;
    crc.AddData((u_int8_t*)XYZ, sizeof(XYZ));
    checksum = crc.GetCrc32();
    crc.Reset();
