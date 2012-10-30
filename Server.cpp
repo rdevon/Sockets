@@ -344,6 +344,7 @@ int main(int argc, const char * argv[])
          std::cout << "My IP: "<< my_IP << ", Client connected from " << out.str() << std::endl;
          bzero(buffer, 256);
          read(new_socket_fd, buffer, 255);
+         std::cout << buffer << std::endl;
          if (hello.FullMatch(buffer, &IP)) say_hello_back(new_socket_fd, IP);
          else {
             error("NO HELLO");
