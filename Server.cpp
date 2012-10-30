@@ -275,12 +275,12 @@ void get_and_return(int socket_fd, std::string thing, std::string from_IP) {
    Crc32 crc;
    u_int32_t checksum;
    
-   int pid = fork();
-   if (pid == 1) {
+   //int pid = fork();
+   //if (pid == 1) {
       new_socket_fd = connect_to(from_IP);
       ask_for(new_socket_fd, thing, buffer, from_IP);
-      exit(0);
-   }
+   //   exit(0);
+   //}
    
    if (XYZ_is.FullMatch(buffer, &thing_got, XYZ)) error("NOTHING RETURNED");
    if (thing != thing_got) error("WRONG XYZ");
