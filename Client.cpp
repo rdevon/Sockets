@@ -84,7 +84,7 @@ int main(int argc, const char * argv[]) {
    std::string host_IP;
    
    int socket_fd;
-   struct sockaddr_in server_address, our_address;
+   struct sockaddr_in server_address, my_address;
    
    char buffer[256];
    
@@ -103,13 +103,15 @@ int main(int argc, const char * argv[]) {
    server_address.sin_addr.s_addr = inet_addr(argv[1]);
    
    if (connect(socket_fd, (struct sockaddr *) &server_address, sizeof(server_address)) < 0) error("ERROR CONNECTING");
-   memset(&our_address, 0, sizeof(our_address));
-   socklen_t our_length;
-   getsockname(socket_fd, (struct sockaddr *) &our_address, &our_length);
-
+   memset(&my_address, 0, sizeof(my_address));
+   socklen_t my_length;
+   getsockname(socket_fd, (struct sockaddr *) &my_address, &my_length);
+   
+   std::cout << "Connecting on port " << ntohs(my_address.sin_port) << std::endl;
+   
    int input;
    
-   out << inet_ntoa(our_address.sin_addr);
+   out << inet_ntoa(my_address.sin_addr);
    my_IP = out.str();
    out.str("");
    out << inet_ntoa(server_address.sin_addr);

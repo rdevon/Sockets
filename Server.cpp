@@ -164,8 +164,10 @@ void say_goodbye_back(int socket_fd, std::string to_IP) {
    exit(0);
 }
 
-void ask_for(int socket_fd, std::string thing, char *buffer, std::string from_IP) {
-   std::string message = "GIVE ME " + thing + "\n";
+void ask_for(int socket_fd, unsigned thing, char *buffer, std::string from_IP) {
+   std::stringstream thingout;
+   thingout << thing;
+   std::string message = "GIVE ME " + thingout.str() + "\n";
    write(socket_fd, message.c_str(), message.length());
    bzero(buffer, 256);
    read(socket_fd, buffer, 255);
@@ -176,7 +178,7 @@ void ask_for(int socket_fd, std::string thing, char *buffer, std::string from_IP
    say_goodbye(socket_fd, from_IP);
 }
 
-void return_checksum(int socket_fd, std::string thing, u_int32_t checksum) {
+void return_checksum(int socket_fd, unsigned thing, u_int32_t checksum) {
    
    std::stringstream out;
    out << checksum;
@@ -184,8 +186,8 @@ void return_checksum(int socket_fd, std::string thing, u_int32_t checksum) {
    write(socket_fd, message.c_str(), message.length());
 }
 
-void generate(int socket_fd, std::string thing, int number) {
-   
+void generate(int socket_fd, unsigned thing, int number) {
+   srand(thing);
    static const char alphanum[] =
    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
    
@@ -203,8 +205,8 @@ void generate(int socket_fd, std::string thing, int number) {
    out.str("");
    out << XYZ;
    std::cout << "Generated " << out.str() << std::endl;
-   
-   file_handle = fopen(thing.c_str(), "w");
+   char str[];
+   file_handle = fopen(itoa(thing, str, 10), "w");
    fwrite(XYZ, 1, sizeof(XYZ), file_handle);
    fclose(file_handle);
    
@@ -220,10 +222,10 @@ void refuse_XYZ(int socket_fd, std::string to_IP) {
    say_goodbye(socket_fd, to_IP);
 }
 
-void give_XYZ(int socket_fd, std::string thing, std::string to_IP) {
-   
+void give_XYZ(int socket_fd, unsigned thing, std::string to_IP) {
+   char str[4];
    FILE *file_handle;
-   file_handle = fopen(thing.c_str(), "r");
+   file_handle = fopen(itoa(thing, str, 10), "r");
    if (file_handle == NULL) {
       refuse_XYZ(socket_fd, to_IP);
       return;
@@ -266,12 +268,12 @@ int connect_to(std::string IP) {
    return socket_fd;
 }
 
-void get_and_return(int socket_fd, std::string thing, std::string from_IP) {
+void get_and_return(int socket_fd, unsigned thing, std::string from_IP) {
    int new_socket_fd;
    
    char buffer[256];
    char XYZ[32];
-   std::string thing_got;
+   unsigned thing_got;
    Crc32 crc;
    u_int32_t checksum;
    
@@ -294,7 +296,6 @@ void get_and_return(int socket_fd, std::string thing, std::string from_IP) {
 
 int main(int argc, const char * argv[])
 {
-   srand(time(NULL));
    
    int pid;
    int socket_fd, new_socket_fd;
@@ -339,7 +340,7 @@ int main(int argc, const char * argv[])
       if (pid == 0) {
          string IP, from_IP;
          int n;
-         string thing;
+         unsigned thing;
          close(socket_fd);
          std::cout << "My IP: "<< my_IP << ", Client connected from " << out.str() << std::endl;
          bzero(buffer, 256);
