@@ -182,7 +182,9 @@ void return_checksum(int socket_fd, unsigned thing, u_int32_t checksum) {
    std::stringstream out;
    out.str("");
    out << checksum;
-   std::string message = thing + "'s CHECKSUM IS " + out.str() + "\n";
+   std::stringstream thingout;
+   thingout << thing;
+   std::string message = thingout.str() + "'s CHECKSUM IS " + out.str() + "\n";
    std::cout << message << std::endl;
    write(socket_fd, message.c_str(), message.length());
 }
