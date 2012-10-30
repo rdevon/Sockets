@@ -281,20 +281,29 @@ void get_and_return(int socket_fd, unsigned thing, std::string from_IP) {
    
    char buffer[256];
    char child_buffer[256];
-   int child_pipe[1];
+   int pipe_fds[2];
+   int read_fd, write_fd;
    char XYZ[32];
    Crc32 crc;
    u_int32_t checksum;
-   pipe(child_pipe);
+   pipe(pipe_fds);
+   read_fd = pipe_fds[0];
+   write_fd = pipe_fds[1];
    int pid = fork();
    if (pid == 0) {
       new_socket_fd = connect_to(from_IP);
       ask_for(new_socket_fd, thing, child_buffer, from_IP);
-      write(child_pipe[0], child_buffer, strlen(child_buffer));
+      close(read_fd);
+      write(write_fd, child_buffer, sizeof(buffer));
+      sleep(1);
+      close(write_fd);
       exit(0);
    }
    else {
-      read(child_pipe[0], buffer, sizeof(buffer));
+      close (write_fd);
+      read(read_fd, buffer, sizeof(buffer));
+      close(read_fd);
+      std::cout << buffer << std::endl;
    }
    
    if (!XYZ_is.FullMatch(buffer, &thing, XYZ)) error("NOTHING RETURNED");
