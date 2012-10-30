@@ -175,6 +175,7 @@ void ask_for(int socket_fd, unsigned thing, char *buffer, std::string from_IP) {
       bzero(buffer, 256);
       read(socket_fd, buffer, 255);
    }
+   std::cout << buffer << std::endl;
    say_goodbye(socket_fd, from_IP);
 }
 
@@ -292,9 +293,6 @@ void get_and_return(int socket_fd, unsigned thing, std::string from_IP) {
       ask_for(new_socket_fd, thing, child_buffer, from_IP);
       write(child_pipe[0], child_buffer, strlen(child_buffer));
       exit(0);
-   }
-   else {
-      while (read(child_pipe[0], buffer, sizeof(buffer)) < 0) {}
    }
    
    if (!XYZ_is.FullMatch(buffer, &thing, XYZ)) error("NOTHING RETURNED");
