@@ -303,8 +303,9 @@ void get_and_return(int socket_fd, unsigned thing, std::string from_IP) {
       close(read_fd);
    }
    bzero(XYZ, 31);
-   
-   if (!XYZ_is.FullMatch(buffer, &thing, XYZ)) error("NOTHING RETURNED");
+   std::string matchstring;
+   if (!XYZ_is.FullMatch(buffer, &thing, &matchstring)) error("NOTHING RETURNED");
+   std::cout << matchstring << std::endl;
    
    crc.AddData((u_int8_t*)XYZ, sizeof(XYZ));
    checksum = crc.GetCrc32();
@@ -345,10 +346,6 @@ int main(int argc, const char * argv[])
    
    while (1)
    {
-      int i;
-      char str[10];
-      XYZ_is.FullMatch("6789 IS I4BPGJ5b0e\n", &i, str);
-      std::cout << "Match? " << i << " " << str << std::endl;
       
       new_socket_fd = accept(socket_fd, (struct sockaddr *) &client_address, &client_length);
       socklen_t server_length = sizeof(our_address);
