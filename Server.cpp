@@ -110,7 +110,7 @@ std::string my_IP;
 int port_number = 8080;
 pcrecpp::RE punk("ARE YOU FEELING LUCKY, PUNK\?");
 pcrecpp::RE hello("HELLO I'M (.+)\n");
-pcrecpp::RE hello_back("HELLO ([^,]+), I'M (.+)\n");
+pcrecpp::RE hello_back("HELLO (.+) I'M (.+)\n");
 pcrecpp::RE goodbye("GOODBYE (.+)\n");
 pcrecpp::RE generate_XYZ("GENERATE (\\d+) BYTES CALLED (\\d+)\n");
 pcrecpp::RE get_XYZ_from("GET (\\d+) FROM (.+)\n");
@@ -138,7 +138,7 @@ void say_hello(int socket_fd, std::string to_IP) {
 }
 
 void say_hello_back(int socket_fd, std::string to_IP) {
-   std::string hello_message = "HELLO " + to_IP + ", I'M " + my_IP + "\n";
+   std::string hello_message = "HELLO " + to_IP + " I'M " + my_IP + "\n";
    write(socket_fd,hello_message.c_str(),hello_message.length());
 }
 
@@ -233,7 +233,7 @@ void give_XYZ(int socket_fd, unsigned thing, std::string to_IP) {
       return;
    }
    fseek (file_handle , 0 , SEEK_END);
-   size_t lSize = ftell (file_handle);
+   size_t lSize = ftell(file_handle);
    rewind (file_handle);
    
    char XYZ[lSize];
