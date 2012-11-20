@@ -109,13 +109,13 @@ private:
 std::string my_IP;
 int port_number = 8080;
 pcrecpp::RE punk("ARE YOU FEELING LUCKY, PUNK\?");
-pcrecpp::RE hello("HELLO(\\s+)I'M(\\s+)(.+)(\n*)");
-pcrecpp::RE hello_back("HELLO(\\s+)(.+)(\\s+)I'M(\\s+)(.+)(\n*)");
-pcrecpp::RE goodbye("GOODBYE(\\s+)(.+)(\n*)");
-pcrecpp::RE generate_XYZ("GENERATE(\\s+)(\\d+)(\\s+)BYTES(\\s+)CALLED(\\s+)(\\d+)(\n*)");
-pcrecpp::RE get_XYZ_from("GET(\\s+)(\\d+)(\\s+)FROM(\\s+)(.+)(\n*)");
-pcrecpp::RE give_me_XYZ("GIVE(\\s+)ME(\\s+)(\\w+)(\n*)");
-pcrecpp::RE XYZ_is("^(\\d+)(\\s+)IS(\\s+)(.+)(\n*)");
+pcrecpp::RE hello("HELLO(\\s+)I'M(\\s+)(.+)");
+pcrecpp::RE hello_back("HELLO(\\s+)(.+)(\\s+)I'M(\\s+)(.+)");
+pcrecpp::RE goodbye("GOODBYE(\\s+)(.+)");
+pcrecpp::RE generate_XYZ("GENERATE(\\s+)(\\d+)(\\s+)BYTES(\\s+)CALLED(\\s+)(\\d+)");
+pcrecpp::RE get_XYZ_from("GET(\\s+)(\\d+)(\\s+)FROM(\\s+)(.+)");
+pcrecpp::RE give_me_XYZ("GIVE(\\s+)ME(\\s+)(\\w+)");
+pcrecpp::RE XYZ_is("^(\\d+)(\\s+)IS(\\s+)(.+)");
 
 void error(const char *msg)
 {
@@ -131,7 +131,7 @@ void say_hello(int socket_fd, std::string to_IP) {
    bzero(buffer,256);
    read(socket_fd,buffer,255);
    
-   if (!hello_back.FullMatch(buffer)) {
+   if (!hello_back.PartialMatch(buffer)) {
       close(socket_fd);
       error("NO HELLO BACK");
    }
@@ -149,7 +149,7 @@ void say_goodbye(int socket_fd, std::string to_IP) {
    bzero(buffer,256);
    read(socket_fd, buffer, 255);
    
-   if (!goodbye.FullMatch(buffer)) {
+   if (!goodbye.PartialMatch(buffer)) {
       close(socket_fd);
       error("NO GOODBYE BACK");
    }
@@ -169,7 +169,7 @@ void ask_for(int socket_fd, unsigned thing, char *buffer, std::string from_IP) {
    write(socket_fd, message.c_str(), message.length());
    bzero(buffer, 256);
    read(socket_fd, buffer, 255);
-   if (punk.FullMatch(buffer)) {
+   if (punk.PartialMatch(buffer)) {
       bzero(buffer, 256);
       read(socket_fd, buffer, 255);
    }
@@ -302,7 +302,7 @@ void get_and_return(int socket_fd, unsigned thing, std::string from_IP) {
       close(read_fd);
    }
    std::string matchstring;
-   if (!XYZ_is.FullMatch(buffer, &thing, &matchstring)) error("NOTHING RETURNED");
+   if (!XYZ_is.PartialMatch(buffer, &thing, &matchstring)) error("NOTHING RETURNED");
    
    
    char XYZ[matchstring.length()];
@@ -371,7 +371,7 @@ int main(int argc, const char * argv[])
          bzero(buffer, 256);
          read(new_socket_fd, buffer, 255);
          std::cout << buffer << std::endl;
-         if (hello.FullMatch(buffer, &IP)) say_hello_back(new_socket_fd, IP);
+         if (hello.PartialMatch(buffer, &IP)) say_hello_back(new_socket_fd, IP);
          else {
             error("NO HELLO");
             close(new_socket_fd);
@@ -381,15 +381,15 @@ int main(int argc, const char * argv[])
             bzero(buffer, 256);
             read(new_socket_fd, buffer, 255);
             std::cout << buffer << std::endl;
-            if (hello.FullMatch(buffer, &IP)) say_hello_back(new_socket_fd, IP);
-            else if (goodbye.FullMatch(buffer)) {
+            if (hello.PartialMatch(buffer, &IP)) say_hello_back(new_socket_fd, IP);
+            else if (goodbye.PartialMatch(buffer)) {
                say_goodbye_back(new_socket_fd, IP);
                close(new_socket_fd);
                exit(0);
             }
-            else if (generate_XYZ.FullMatch(buffer, &n, &thing)) generate(new_socket_fd, thing, n);
-            else if (get_XYZ_from.FullMatch(buffer, &thing, &from_IP)) get_and_return(new_socket_fd, thing, from_IP);
-            else if (give_me_XYZ.FullMatch(buffer, &thing)) give_XYZ(new_socket_fd, thing, IP);
+            else if (generate_XYZ.PartialMatch(buffer, &n, &thing)) generate(new_socket_fd, thing, n);
+            else if (get_XYZ_from.PartialMatch(buffer, &thing, &from_IP)) get_and_return(new_socket_fd, thing, from_IP);
+            else if (give_me_XYZ.PartialMatch(buffer, &thing)) give_XYZ(new_socket_fd, thing, IP);
             else {
                close(new_socket_fd);
                error("DID NOT UNDERSTAND COMMAND");
