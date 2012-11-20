@@ -120,7 +120,7 @@ pcrecpp::RE XYZ_is("^(\\.+)(\\s+)IS(\\s+)(.+)");
 void error(const char *msg)
 {
    perror(msg);
-   exit(0);
+   exit(EXIT_FAILURE);
 }
 
 void say_hello(int socket_fd, std::string to_IP) {
@@ -139,6 +139,7 @@ void say_hello(int socket_fd, std::string to_IP) {
 
 void say_hello_back(int socket_fd, std::string to_IP) {
    std::string hello_message = "HELLO " + to_IP + " I'M " + my_IP + "\n";
+   std::cout << hello_message << std::endl;
    write(socket_fd,hello_message.c_str(),hello_message.length());
 }
 
@@ -385,7 +386,7 @@ int main(int argc, const char * argv[])
             else if (goodbye.PartialMatch(buffer)) {
                say_goodbye_back(new_socket_fd, IP);
                close(new_socket_fd);
-               exit(0);
+               exit(EXIT_SUCCESS);
             }
             else if (generate_XYZ.PartialMatch(buffer, &n, &thing)) generate(new_socket_fd, thing, n);
             else if (get_XYZ_from.PartialMatch(buffer, &thing, &from_IP)) get_and_return(new_socket_fd, thing, from_IP);
