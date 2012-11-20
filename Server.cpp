@@ -109,13 +109,13 @@ private:
 std::string my_IP;
 int port_number = 8080;
 pcrecpp::RE punk("ARE YOU FEELING LUCKY, PUNK\?");
-pcrecpp::RE hello("HELLO I'M (.+)\n");
-pcrecpp::RE hello_back("HELLO (.+) I'M (.+)\n");
-pcrecpp::RE goodbye("GOODBYE (.+)\n");
-pcrecpp::RE generate_XYZ("GENERATE (\\d+) BYTES CALLED (\\d+)\n");
-pcrecpp::RE get_XYZ_from("GET (\\d+) FROM (.+)\n");
-pcrecpp::RE give_me_XYZ("GIVE ME (\\w+)\n");
-pcrecpp::RE XYZ_is("^(\\d+) IS (.+)\n");
+pcrecpp::RE hello("HELLO(\\s+)I'M(\\s+)(.+)(\\s*)");
+pcrecpp::RE hello_back("HELLO(\\s+)(.+)(\\s+)I'M(\\s+)(.+)(\\s*)");
+pcrecpp::RE goodbye("GOODBYE(\\s+)(.+)(\\s*)");
+pcrecpp::RE generate_XYZ("GENERATE(\\s+)(\\d+)(\\s+)BYTES(\\s+)CALLED(\\s+)(\\d+)(\\s*)");
+pcrecpp::RE get_XYZ_from("GET(\\s+)(\\d+)(\\s+)FROM(\\s+)(.+)(\\s*)");
+pcrecpp::RE give_me_XYZ("GIVE(\\s+)ME(\\s+)(\\w+)(\\s*)");
+pcrecpp::RE XYZ_is("^(\\d+)(\\s+)IS(\\s+)(.+)(\\s*)");
 
 void error(const char *msg)
 {
