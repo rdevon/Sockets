@@ -109,13 +109,13 @@ private:
 std::string my_IP;
 int port_number = 8080;
 pcrecpp::RE punk("ARE YOU FEELING LUCKY, PUNK\?");
-pcrecpp::RE hello("HELLO(\\s+)I'M(\\s+)(.+)(?\n)");
-pcrecpp::RE hello_back("HELLO(\\s+)(.+)(\\s+)I'M(\\s+)(.+)(?\n)");
-pcrecpp::RE goodbye("GOODBYE(\\s+)(.+)(?\n)");
-pcrecpp::RE generate_XYZ("GENERATE(\\s+)(\\d+)(\\s+)BYTES(\\s+)CALLED(\\s+)(\\d+)(?\n)");
-pcrecpp::RE get_XYZ_from("GET(\\s+)(\\d+)(\\s+)FROM(\\s+)(.+)(?\n)");
-pcrecpp::RE give_me_XYZ("GIVE(\\s+)ME(\\s+)(\\w+)(?\n)");
-pcrecpp::RE XYZ_is("^(\\d+)(\\s+)IS(\\s+)(.+)(?\n)");
+pcrecpp::RE hello("HELLO(\\s+)I'M(\\s+)(.+)(\n*)");
+pcrecpp::RE hello_back("HELLO(\\s+)(.+)(\\s+)I'M(\\s+)(.+)(\n*)");
+pcrecpp::RE goodbye("GOODBYE(\\s+)(.+)(\n*)");
+pcrecpp::RE generate_XYZ("GENERATE(\\s+)(\\d+)(\\s+)BYTES(\\s+)CALLED(\\s+)(\\d+)(\n*)");
+pcrecpp::RE get_XYZ_from("GET(\\s+)(\\d+)(\\s+)FROM(\\s+)(.+)(\n*)");
+pcrecpp::RE give_me_XYZ("GIVE(\\s+)ME(\\s+)(\\w+)(\n*)");
+pcrecpp::RE XYZ_is("^(\\d+)(\\s+)IS(\\s+)(.+)(\n*)");
 
 void error(const char *msg)
 {
