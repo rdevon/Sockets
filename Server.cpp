@@ -372,7 +372,10 @@ int main(int argc, const char * argv[])
          bzero(buffer, 256);
          read(new_socket_fd, buffer, 255);
          std::cout << buffer << std::endl;
-         if (hello.PartialMatch(buffer, &IP)) say_hello_back(new_socket_fd, IP);
+         if (hello.PartialMatch(buffer, &IP)) {
+            std::cout << "returning hello" << std::endl;
+            say_hello_back(new_socket_fd, IP);
+         }
          else {
             error("NO HELLO");
             close(new_socket_fd);
@@ -382,13 +385,20 @@ int main(int argc, const char * argv[])
             bzero(buffer, 256);
             read(new_socket_fd, buffer, 255);
             std::cout << buffer << std::endl;
-            if (hello.PartialMatch(buffer, &IP)) say_hello_back(new_socket_fd, IP);
+            if (hello.PartialMatch(buffer, &IP)) {
+               std::cout << "returning hello" << std::endl;
+               say_hello_back(new_socket_fd, IP);
+            }
             else if (goodbye.PartialMatch(buffer)) {
+               std::cout << "returning goodbye" << std::endl;
                say_goodbye_back(new_socket_fd, IP);
                close(new_socket_fd);
                exit(EXIT_SUCCESS);
             }
-            else if (generate_XYZ.PartialMatch(buffer, &n, &thing)) generate(new_socket_fd, thing, n);
+            else if (generate_XYZ.PartialMatch(buffer, &n, &thing)) {
+               std::cout << "generating " << n << " bytes called " << thing << std::endl;
+               generate(new_socket_fd, thing, n);
+            }
             else if (get_XYZ_from.PartialMatch(buffer, &thing, &from_IP)) get_and_return(new_socket_fd, thing, from_IP);
             else if (give_me_XYZ.PartialMatch(buffer, &thing)) give_XYZ(new_socket_fd, thing, IP);
             else {
