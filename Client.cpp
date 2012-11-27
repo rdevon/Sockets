@@ -20,14 +20,15 @@
 
 int port_number = 8080;
 std::string my_IP;
-pcrecpp::RE punk("ARE YOU FEELING LUCKY, PUNK\?");
-pcrecpp::RE hello("HELLO I'M (.+)\n");
-pcrecpp::RE hello_back("HELLO ([^,]+), I'M (.+)\n");
-pcrecpp::RE goodbye("GOODBYE (.+)\n");
-pcrecpp::RE generate_XYZ("GENERATE (\\d+) BYTES CALLED (\\w+)\n");
-pcrecpp::RE get_XYZ_from("GET (\\w+) FROM (.+)\n");
-pcrecpp::RE give_me_XYZ("GIVE ME (\\w+)\n");
-pcrecpp::RE XYZ_is("(\\w) IS (.+)\n");
+pcrecpp::RE punk("(?i)ARE YOU FEELING LUCKY, PUNK\?");
+pcrecpp::RE hello("(?i)HELLO\\s+I\'M\\s+(.+)\n?");
+pcrecpp::RE hello_back("(?i)HELLO\\s+(.+)\\s+I\'M\\s+(.+)\n?");
+pcrecpp::RE goodbye("(?i)GOODBYE\\s+(.+)\n?");
+pcrecpp::RE generate_XYZ("(?i)GENERATE\\s+(\\d.+)\\s+BYTES\\s+CALLED\\s+(\\d+)\n?");
+pcrecpp::RE get_XYZ_from("(?i)GET\\s+(\\d+)\\s+FROM\\s+(.+)\n?");
+pcrecpp::RE give_me_XYZ("(?i)GIVE\\s+ME\\s+(\\d+)\n?");
+pcrecpp::RE XYZ_is("(?i)(\\d+)\\s+IS\\s+(.+)\n?");
+
 
 void error(const char *msg)
 {
@@ -46,7 +47,6 @@ void enter_message(int socket_fd) {
    char buffer[256];
    bzero(buffer, strlen(buffer));
    std::cout << "Enter message: " << std::endl;
-   std::cin.ignore();
    std::cin.getline(buffer, 256);
    std::stringstream out;
    out << buffer;
