@@ -375,6 +375,7 @@ int main(int argc, const char * argv[])
             std::cout << "returning hello" << std::endl;
             say_hello_back(new_socket_fd, IP);
          }
+         
          else {
             error("NO HELLO");
             close(new_socket_fd);

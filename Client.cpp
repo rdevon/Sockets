@@ -79,6 +79,16 @@ void say_goodbye(int socket_fd, std::string to_IP) {
    exit(0);
 }
 
+void infinite_hello(int socket_fd, std::string to_IP) {
+   while (1) {
+      char buffer[256];
+      std::string hello_message = "HELLO I'M " + my_IP + "\n";
+      write(socket_fd,hello_message.c_str(),hello_message.length());
+      bzero(buffer,256);
+      read(socket_fd,buffer,255);
+   }
+}
+
 int main(int argc, const char * argv[]) {
    
    std::string host_IP;
@@ -124,6 +134,7 @@ int main(int argc, const char * argv[]) {
       print_instructs();
       std::cin >> input;
       switch (input) {
+         case 0: infinite_hello(socket_fd, host_IP); break;
          case 1: say_hello(socket_fd, host_IP); break;
          case 2: say_goodbye(socket_fd, host_IP); break;
          case 3: enter_message(socket_fd); break;
